@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
-        handler = UpdateCardsHandler()
+        handler  = UpdateCardsHandler()
 
         loadImages()
 
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
         context = mainTable?.context
 
-        backImage = resources.getDrawable(R.drawable.icon)
+        backImage = resources.getDrawable(R.drawable.back1)
 
         btnGroupOfLevel = this.findViewById(R.id.levelGroup) as MultiStateToggleButton
     }
@@ -157,7 +157,7 @@ class MainActivity : AppCompatActivity() {
                 seconedCard = Cards(button, x, y)
 
                 turns++
-                (findViewById(R.id.tv1) as TextView).text = "Tries: $turns"
+                (findViewById<TextView>(R.id.tv1)).text = "Tries: $turns"
 
 
                 val tt = object : TimerTask() {
@@ -244,27 +244,20 @@ class MainActivity : AppCompatActivity() {
 
         images = ArrayList()
 
-        images?.add(resources.getDrawable(R.drawable.card1))
-        images?.add(resources.getDrawable(R.drawable.card2))
-        images?.add(resources.getDrawable(R.drawable.card3))
-        images?.add(resources.getDrawable(R.drawable.card4))
-        images?.add(resources.getDrawable(R.drawable.card5))
-        images?.add(resources.getDrawable(R.drawable.card6))
-        images?.add(resources.getDrawable(R.drawable.card7))
-        images?.add(resources.getDrawable(R.drawable.card8))
-        images?.add(resources.getDrawable(R.drawable.card9))
-        images?.add(resources.getDrawable(R.drawable.card10))
-        images?.add(resources.getDrawable(R.drawable.card11))
-        images?.add(resources.getDrawable(R.drawable.card12))
-        images?.add(resources.getDrawable(R.drawable.card13))
-        images?.add(resources.getDrawable(R.drawable.card14))
-        images?.add(resources.getDrawable(R.drawable.card15))
-        images?.add(resources.getDrawable(R.drawable.card16))
-        images?.add(resources.getDrawable(R.drawable.card17))
-        images?.add(resources.getDrawable(R.drawable.card18))
-        images?.add(resources.getDrawable(R.drawable.card19))
-        images?.add(resources.getDrawable(R.drawable.card20))
-        images?.add(resources.getDrawable(R.drawable.card21))
+        images?.add(resources.getDrawable(R.drawable.grape))
+        images?.add(resources.getDrawable(R.drawable.apple2))
+        images?.add(resources.getDrawable(R.drawable.kiwi))
+        images?.add(resources.getDrawable(R.drawable.watermelon))
+        images?.add(resources.getDrawable(R.drawable.orange))
+        images?.add(resources.getDrawable(R.drawable.tomato))
+        images?.add(resources.getDrawable(R.drawable.cucumber))
+        images?.add(resources.getDrawable(R.drawable.peach))
+        images?.add(resources.getDrawable(R.drawable.maydanox))
+        images?.add(resources.getDrawable(R.drawable.lettuce))
+        images?.add(resources.getDrawable(R.drawable.lemon))
+        images?.add(resources.getDrawable(R.drawable.patato))
+        images?.add(resources.getDrawable(R.drawable.havuc))
+
 
     }
 
