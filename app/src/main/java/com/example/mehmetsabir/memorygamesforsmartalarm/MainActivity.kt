@@ -1,21 +1,23 @@
 package com.example.mehmetsabir.memorygamesforsmartalarm
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import kotlinx.android.synthetic.main.alertlayout.view.*
 import org.honorato.multistatetogglebutton.MultiStateToggleButton
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private var btnGroupOfLevel: MultiStateToggleButton? = null
     private var ROW_COUNT = -1
     private var COL_COUNT = -1
     private var context: Context? = null
@@ -28,7 +30,9 @@ class MainActivity : AppCompatActivity() {
     private var buttonListener: ButtonListener? = null
     private var list: ArrayList<Int>? = null
     private var counter = 0
-
+    private var radioGroup : RadioGroup? = null
+    private var btnOk :  Button? = null
+    private var btnCancel :  Button? = null
     private val lock = Any()
 
     internal var turns: Int = 0
@@ -40,8 +44,36 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+
         init()
-        changeLevel()
+        dialogAc()
+
+
+    }
+
+    fun dialogAc() {
+        val inflater = this.layoutInflater
+        val view = inflater.inflate(R.layout.alertlayout, null)
+
+        radioGroup = view.findViewById(R.id.rbtnGrpLevel)
+        btnOk = view.findViewById(R.id.btnOkay)
+        btnCancel = view.findViewById(R.id.btnCancel)
+
+        val alert = AlertDialog.Builder(this)
+        alert.setView(view)
+        alert.setCancelable(false)
+        val dialog = alert.create()
+
+        btnOk?.setOnClickListener(View.OnClickListener {
+
+            changeLevel(radioGroup?.checkedRadioButtonId!!)
+
+            dialog.cancel()
+        })
+        btnCancel?.setOnClickListener(View.OnClickListener { dialog.cancel() })
+
+
+        dialog.show()
 
     }
 
@@ -65,35 +97,35 @@ class MainActivity : AppCompatActivity() {
 
         backImage = resources.getDrawable(R.drawable.back1)
 
-        btnGroupOfLevel = this.findViewById(R.id.levelGroup) as MultiStateToggleButton
     }
 
-    private fun changeLevel() {
-
-        btnGroupOfLevel?.setOnValueChangedListener { position ->
+    private fun changeLevel(position : Int) {
 
             var x: Int = 0
             var y: Int = 0
 
             counter = 0
 
-            when (position) {
 
-                0 -> {
-                    x = 2
-                    y = 2
-                }
-                1 -> {
-                    x = 2
-                    y = 4
-                }
-                2 -> {
-                    x = 3
-                    y = 4
-                }
+        when (position) {
+            R.id.rbEasy -> {
+
+                x = 2
+                y = 2
             }
-            newGame(x, y)
+            R.id.rbMedium ->{
+                x = 2
+                y = 4
+            }
+            R.id.rbHard ->{
+                x = 3
+                y = 4
+            }
+            else ->  Toast.makeText(this@MainActivity,"Seçilmedi",Toast.LENGTH_LONG).show()
         }
+
+            newGame(x, y)
+
     }
 
     private fun newGame(c: Int, r: Int) {
@@ -252,11 +284,11 @@ class MainActivity : AppCompatActivity() {
         images?.add(resources.getDrawable(R.drawable.tomato))
         images?.add(resources.getDrawable(R.drawable.cucumber))
         images?.add(resources.getDrawable(R.drawable.peach))
-        images?.add(resources.getDrawable(R.drawable.maydanox))
+        images?.add(resources.getDrawable(R.drawable.parsley))
         images?.add(resources.getDrawable(R.drawable.lettuce))
         images?.add(resources.getDrawable(R.drawable.lemon))
-        images?.add(resources.getDrawable(R.drawable.patato))
-        images?.add(resources.getDrawable(R.drawable.havuc))
+        images?.add(resources.getDrawable(R.drawable.potato))
+        images?.add(resources.getDrawable(R.drawable.carrot))
 
 
     }
@@ -279,6 +311,9 @@ class MainActivity : AppCompatActivity() {
                 if (size / 2 == counter) {
 
                     Toast.makeText(this@MainActivity, "Bitti", Toast.LENGTH_LONG).show()
+                    init()
+                    dialogAc()
+
 
                 }
 

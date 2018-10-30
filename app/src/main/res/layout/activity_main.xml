@@ -8,14 +8,6 @@
     android:background="@drawable/background"
     tools:context=".MainActivity">
 
-    <org.honorato.multistatetogglebutton.MultiStateToggleButton
-        android:id="@+id/levelGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:mstbPrimaryColor="@color/blue"
-        app:mstbSecondaryColor="@color/colorAccent"
-        app:values="@array/planets_array" />
-
 
     <TableLayout
         android:id="@+id/TableLayout03"

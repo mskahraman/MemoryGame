@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">MemoryGamesForSmartAlarm</string>
+    <string name="easy_2_2">Easy (2*2)</string>
+    <string name="medium_2_4">Medium (2*4)</string>
+    <string name="hard_3_4">Hard (3*4)</string>
+    <string name="okay">Okay</string>
+    <string name="cancel">Cancel</string>
 
     <string-array name="planets_array">
         <item>Easy (2*2)</item>
