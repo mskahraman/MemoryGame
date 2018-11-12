@@ -1,7 +1,6 @@
 package com.example.mehmetsabir.memorygamesforsmartalarm
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -11,19 +10,22 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
-import kotlinx.android.synthetic.main.alertlayout.view.*
-import org.honorato.multistatetogglebutton.MultiStateToggleButton
 import java.util.*
+import android.view.ViewGroup.MarginLayoutParams
+import android.widget.LinearLayout
+import android.view.ViewGroup.LayoutParams.FILL_PARENT
 
 class MainActivity : AppCompatActivity() {
+
     private var ROW_COUNT = -1
     private var COL_COUNT = -1
     private var context: Context? = null
     private var backImage: Drawable? = null
     private var cards: Array<IntArray>? = null
-    internal var size: Int = 0
+    private var size: Int = 0
     private var images: MutableList<Drawable>? = null
     private var firstCard: Cards? = null
     private var seconedCard: Cards? = null
@@ -34,8 +36,10 @@ class MainActivity : AppCompatActivity() {
     private var btnOk :  Button? = null
     private var btnCancel :  Button? = null
     private val lock = Any()
-
-    internal var turns: Int = 0
+    private var scale : Float? = null
+    private var p : android.widget.TableRow.LayoutParams? = null
+    private var turns: Int = 0
+    private var imgBtn : Button? = null
     private var mainTable: TableLayout? = null
     private var handler: UpdateCardsHandler? = null
 
@@ -43,15 +47,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
         init()
-        dialogAc()
-
+        openDialogScreen()
 
     }
 
-    fun dialogAc() {
+    private fun openDialogScreen() {
+
+
         val inflater = this.layoutInflater
         val view = inflater.inflate(R.layout.alertlayout, null)
 
@@ -64,13 +67,13 @@ class MainActivity : AppCompatActivity() {
         alert.setCancelable(false)
         val dialog = alert.create()
 
-        btnOk?.setOnClickListener(View.OnClickListener {
+        btnOk?.setOnClickListener {
 
             changeLevel(radioGroup?.checkedRadioButtonId!!)
 
             dialog.cancel()
-        })
-        btnCancel?.setOnClickListener(View.OnClickListener { dialog.cancel() })
+        }
+        btnCancel?.setOnClickListener { dialog.cancel() }
 
 
         dialog.show()
@@ -79,23 +82,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
 
-
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         handler  = UpdateCardsHandler()
 
         loadImages()
 
-
-
         buttonListener = ButtonListener()
 
         mainTable = this.findViewById(R.id.TableLayout03) as TableLayout
 
-
         context = mainTable?.context
 
-        backImage = resources.getDrawable(R.drawable.back1)
+        backImage = resources.getDrawable(R.drawable.card_empty)
 
     }
 
@@ -106,10 +105,9 @@ class MainActivity : AppCompatActivity() {
 
             counter = 0
 
-
         when (position) {
-            R.id.rbEasy -> {
 
+            R.id.rbEasy -> {
                 x = 2
                 y = 2
             }
@@ -123,9 +121,7 @@ class MainActivity : AppCompatActivity() {
             }
             else ->  Toast.makeText(this@MainActivity,"Seçilmedi",Toast.LENGTH_LONG).show()
         }
-
             newGame(x, y)
-
     }
 
     private fun newGame(c: Int, r: Int) {
@@ -152,7 +148,7 @@ class MainActivity : AppCompatActivity() {
         turns = 0
 
         //
-        (findViewById<TextView>(R.id.tv1)).text = "Tries:  $turns"
+       // (findViewById<TextView>(R.id.tv1)).text = "Tries:  $turns"
 
 
     }
@@ -189,7 +185,7 @@ class MainActivity : AppCompatActivity() {
                 seconedCard = Cards(button, x, y)
 
                 turns++
-                (findViewById<TextView>(R.id.tv1)).text = "Tries: $turns"
+              //  (findViewById<TextView>(R.id.tv1)).text = "$turns"
 
 
                 val tt = object : TimerTask() {
@@ -214,7 +210,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
 
     private fun loadCards() {
         try {
@@ -250,49 +245,50 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     private fun createRow(y: Int): TableRow {
         val row = TableRow(context)
         row.setHorizontalGravity(Gravity.CENTER)
 
         for (x in 0 until COL_COUNT) {
             row.addView(createImageButton(x, y))
+
+
         }
         return row
     }
 
-
     private fun createImageButton(x: Int, y: Int): View {
+        p = android.widget.TableRow.LayoutParams();
+        imgBtn= Button(context)
+        imgBtn?.setBackgroundDrawable(backImage)
+        imgBtn?.id = 100 * x + y
+        imgBtn?.setOnClickListener(buttonListener)
+        p?.rightMargin = dpToPixel(10, context!!)
+        p?.bottomMargin = dpToPixel(10, context!!) // right-margin = 10dp
+        imgBtn?.layoutParams = p;
+        return imgBtn!!
 
-        val imgBtn = Button(context)
-        imgBtn.setBackgroundDrawable(backImage)
-        imgBtn.id = 100 * x + y
-        imgBtn.setOnClickListener(buttonListener)
-        return imgBtn
+
     }
 
+    private fun dpToPixel(dp : Int, context :Context ) : Int {
+        if (scale == null)
+            scale = context.getResources().displayMetrics.density;
+        return (dp*scale!!).toInt()
+    }
 
     private fun loadImages() {
 
         images = ArrayList()
 
-        images?.add(resources.getDrawable(R.drawable.grape))
-        images?.add(resources.getDrawable(R.drawable.apple2))
-        images?.add(resources.getDrawable(R.drawable.kiwi))
-        images?.add(resources.getDrawable(R.drawable.watermelon))
-        images?.add(resources.getDrawable(R.drawable.orange))
-        images?.add(resources.getDrawable(R.drawable.tomato))
-        images?.add(resources.getDrawable(R.drawable.cucumber))
-        images?.add(resources.getDrawable(R.drawable.peach))
-        images?.add(resources.getDrawable(R.drawable.parsley))
-        images?.add(resources.getDrawable(R.drawable.lettuce))
-        images?.add(resources.getDrawable(R.drawable.lemon))
-        images?.add(resources.getDrawable(R.drawable.potato))
-        images?.add(resources.getDrawable(R.drawable.carrot))
-
+        images?.add(resources.getDrawable(R.drawable.card1))
+        images?.add(resources.getDrawable(R.drawable.card2))
+        images?.add(resources.getDrawable(R.drawable.card3))
+        images?.add(resources.getDrawable(R.drawable.card4))
+        images?.add(resources.getDrawable(R.drawable.card5))
+        images?.add(resources.getDrawable(R.drawable.card6))
 
     }
-
 
     inner class UpdateCardsHandler : Handler() {
 
@@ -312,7 +308,7 @@ class MainActivity : AppCompatActivity() {
 
                     Toast.makeText(this@MainActivity, "Bitti", Toast.LENGTH_LONG).show()
                     init()
-                    dialogAc()
+                    openDialogScreen()
 
 
                 }
